@@ -1,0 +1,592 @@
+\documentclass[fontset=none,oneside]{book}
+\usepackage[UTF8,heading=true,scheme=chinese]{ctex}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{cite}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{balance}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{enumitem}
+\usepackage{subeqnarray}
+\usepackage{makeidx}
+\usepackage[top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm]{geometry}
+
+\definecolor{shadecolor}{gray}{0.85}
+\pagestyle{headings}
+\ctexset{fontset=mac}
+\ctexset{space=true}
+\ctexset{section={
+	name={第,节},
+	number=\arabic{chapter}.\arabic{section},
+}
+}
+
+\input{xeCJK-fonts.def}
+%\makeindex
+\renewcommand{\contentsname}{目 \quad 录}
+\begin{document}
+%\title{Lecture Notes}
+\title{Mathematic Notes}
+\author{邵华}
+\maketitle
+\tableofcontents
+%\printindex
+\chapter{矩阵计算}
+\section{文中符号}
+\begin{itemize}
+\item 用大写字母$\bf A$表示矩阵，小写字母$\bf a$表示列向量，a表示实数或者复数标量
+\item $+,-,*$分别表示矩阵加，减乘
+\item $\bf A^T$表示$\bf A$的转置
+\item $\bf A^H$表示$\bf A$的共轭转置，如果$\bf A$是实矩阵，$\bf A^T=\bf A^H$
+\item $\bf A^{-1},A^{\#},A^{+}$分别表示逆，一般逆和伪逆
+\item $.*,./$表示逐元素的乘法和除法
+\item $|\bf A|,||\bf A||_F$代表行列式和Frobenius范数
+\item $||\bf a||$代表欧几里得范数
+\item $|a|$代表$a$的绝对值
+\end{itemize}
+\section{矩阵推导结论}
+\begin{equation}
+\xi_i=\frac{||\rm{H}\rm{T}||_{i,i}^2}{[\rm{HTT^HH^H}]_{i,i}}
+\end{equation}
+将${\bf HT}$进行SVD分解
+\begin{equation}
+{\bf HT=U}\Lambda{\bf V^H }
+\end{equation}
+则有：
+\begin{equation}
+\xi_i=\frac{||{\bf HT}||_{i,i}^2}{[\bf{HTT^HH^H}]_{i,i}}=\frac{|u_i^H\Lambda v_i|^2}{|u_i^H\Lambda^2v_i|}
+\end{equation}
+其中，$u_i,v_i$分别是$\mathbf{U^H,V^H}$的第$i$列
+\begin{shaded}
+\noindent
+\emph{
+Cauchy-Schwarz不等式：
+\begin{equation}
+|\langle x,y \rangle|^2\leq \langle x,x \rangle\cdot\langle y,y \rangle
+\end{equation}
+}
+\emph{Cauchy-Schwarz积分不等式：
+\begin{equation}
+(\int_{a}^{b}f(x)g(x)dx)^2\leq \int_{a}^{b}f^2(x)dx\int_{a}^{b}g^2(x)dx
+\end{equation}
+}
+\emph{$H\ddot{o}lder$不等式，当$p,q\geq 1$，且$\frac{1}{p}+\frac{1}{q}=1$
+\begin{equation}
+|\sum\limits_{i=1}^{n}a_ib_i|\leq (\sum\limits_{i=1}^{n}|a_i|^p)^{1\over p}(\sum\limits_{i=1}^{n}|b_i|^q)^{1\over q}
+\end{equation}
+}
+\emph{Minkowski积分不等式：
+\begin{equation}
+(\int_{a}^{b}|f(x)g(x)|^pdx)^{\frac{1}{p}} \leq (\int_{a}^{b}|f(x)|^pdx)^{\frac{1}{p}} (\int_{a}^{b}|g(x)|^pdx)^{\frac{1}{p}}
+\end{equation}
+}
+\emph{当p=q=2时候，Minkowski积分不等式和$H\ddot{o}lder$不等式退化成Cauchy不等式。}
+\end{shaded}
+
+\begin{shaded}
+Jesen不等式，给出了积分的凸函数值和凸函数积分值之间的关系：若$f(x)$是
+区间$[a,b]$的凸函数，对任意的$x_{i},x_{2},x_{3},\cdots,x_{n}\in (a,b)$，
+有
+\begin{equation}
+\label{eq:1}
+f(\frac{x_{n}+x_{2}+\cdots+x_{n}}{n})\leq \frac{1}{n}[f(x_{1})+f(x_{2})+\cdots+f(x_{n})]
+\end{equation}
+\end{shaded}
+
+\begin{shaded}
+\begin{equation}
+\label{eq:2}
+{\bf Tr[AA^{H}]=||vec(A)||^{2}=||vec{(A^{H})||^{2}}}
+\end{equation}
+\begin{equation}
+\label{eq:3}
+\sum_{i}\lambda_{i}||\mathbf{A}e_{i}||^{2}= \mathbf{Tr} \{\mathbf{A} \Lambda \mathbf{A^{H}}
+    \}
+\end{equation}
+\end{shaded}
+
+\section{矩阵微积分}
+\subsection{符号表示}
+\begin{shaded}
+\begin{itemize}
+\item $d/dx(\bf y)$是一个向量，第$i$个元素为$dy(i)/dx$
+\item $d/d{\bf x}(y)$是一个向量，第$i$个元素为$dy/dx(i)$
+\item $d/d{\bf x}({\bf y^T})$是一个矩阵，第$(i,j)$个元素为$dy(j)/dx(i)$
+\item $d/dx({\bf Y})$是一个矩阵，第$(i,j)$个元素为$dy(i,j)/dx$
+\item $d/d{\bf X}(y)$是一个矩阵，第$(i,j)$个元素是$dy/dx(i,j)$
+\end{itemize}
+\end{shaded}
+\subsection{线性乘积的导数}
+\begin{itemize}
+\item $d/dx({\bf AYB})={\bf A}*d/dx({\bf Y})*{\bf B}$
+\item $d/dx({\bf Ay})={\bf A}*d/dx({\bf y})$
+\item $d/d{\bf x}({\bf x^TA})={\bf A}$
+\item $d/d{\bf x}({\bf x^T})={\bf I}$
+\item $d/d{\bf x}({\bf x^Ta})=d/d{\bf x}({\bf a^Tx})={\bf a}$
+\item $d/d{\bf X}({\bf a^TXb})={\bf ab^T}$
+\item $d/d{\bf X}({\bf a^TXa})=d/d{\bf X}({\bf a^TX^Ta})={\bf aa^T}$
+\item $d/d{\bf X}({\bf a^TX^Tb})={\bf ba^T}$
+\item $d/dx({\bf YZ})={\bf Y}*d/dx({\bf Z})+d/dx({\bf Y})*{\bf Z}$
+\end{itemize}
+\subsection{二次乘积的导数}
+\begin{itemize}
+\item $d/d{\bf x}{\bf (Ax+b)^TC(Dx+e)}={\bf A^TC(Dx+e)+D^TC^T(Ax+b)}$
+\item $d/d{\bf x}{\bf(x^TCx)}={\bf (C+C^T)x}$
+\item $d/d{\bf x}{\bf(x^TCx)}=2Cx$
+\item {\color{red} [C:symmetric]}$d/d{\bf x}{\bf x^Tx}=2x$
+\item $d/d{\bf x}{\bf (Ax+b)^T(Dx+e)}={\bf A^T(Dx+e)+D^T(Ax+b)}$
+\item $d/d{\mathbf{x}}\mathbf{(Ax+b)^T(Ax+b)=2A^T(Ax+b)}$
+\item {\color{red}[C:symmetric]}$d/d{\bf x}\mathbf{(Ax+b)^TC(Ax+b)=2A^TC(Ax+b)}$
+\item $d/d{\bf X}\mathbf{(a^TX^TXb)=X(ab^T+ba^T)}$
+\item $d/d{\bf X}\mathbf{(a^TX^TXa)=2Xba^T}$
+\item $d/d{\bf X}\mathbf{(a^TX^TCXb)=C^TXab^T+CXba^T}$
+\item $d/d{\bf X}\mathbf{(a^TX^TCXa)=(C+C^T)Xaa^T}$
+\item {\color{red} [C:Symmetric]} $d/d{\bf X}\mathbf{(a^TX^TCXa)=2CXaa^T}$
+\item $d/d{\bf X}\mathbf{((Xa+b)^T)C(Xa+b)=(C+C^T)(Xa+b)a^T}$
+\end{itemize}
+\subsection{三次乘积的导数}
+\begin{equation}
+d/d{\bf x}\mathbf{(x^TAxx^T)=(A+A^T)xx^T+x^TAxI}
+\end{equation}
+\subsection{逆矩阵的导数}
+\begin{equation}
+d/d{\bf x}\mathbf{(Y^{-1})=-Y^{-1}}d/dx\mathbf{(Y)Y^{-1}}
+\end{equation}
+\subsection{迹的导数}
+\begin{itemize}
+\item $d/d{\bf X}\mathbf{(tr(X))=I}$
+\item $d/d\bf X(tr\mathbf{(X^k)}=\mathbf{k(X^{k-1})^T}$
+\item $d/d\bf
+    X(tr\mathbf{(AX^{k})})=\mathbf{\sum\limits_{r=0:k-1}(X^{r}AX^{k-r-1})^{T}}$
+\item $d/d\bf X(tr(AX^{-1}B))=-(X^{-1}BAX^{-1})^{T}$
+\item $d/d{\bf X (tr(AX^{-1}))}=d/d{\bf X
+    (tr(X^{-1}A))=-X^{-T}A^{T}x^{-T}}$
+\item $d/d{\bf X(tr(A^{T}XB^{T}))}=d/d{\bf X(tr(BX^{T}A))=AB}$
+\item $d/d{\bf X(tr(XA^{T}))}=d/d{\bf X(tr(X^{T}A))}=d/d{\bf
+    X(tr(A^{T}X))}=d/d{\bf X(tr(AX^{T}))}={\bf A}$
+\item $d/d{\bf X(tr(AXBX^{T}))=A^{T}XB^{T}+AXB}$
+\item $d/d{\bf X(tr(XAX^{T}))=X(A+A^{T})}$
+\item $d/d{\bf X(tr(X^{T}AX))=X^{T}(A+A^{T})}$
+\item $d/d{\bf X(tr(AX^{T}X))=(A+A^{T})X}$
+\item $d/d{\bf X(tr(AXBX))=A^{T}X^{T}B^{T}+B^{T}X^{T}A^{T}}$
+\item {\color{red}[C:symmetric]}$d/d{\bf X(tr((X^{T}CX)^{-1}A)}=d/d{\bf
+  X(tr(A(X^{T}CX)^{-1}))}=\bf
+-(CX(X^{T}CX)^{-1})(A+A^{T})(X^{T}CX)^{-1}$
+\item {\color{red}[B,C:Symmetric]}
+\item $d/d{\bf
+    X(tr((X^{T}CX)^{-1}(X^{T}BX))}=d/d{\bf
+    X(tr((X^{T}BX)(X^{T}CX)^{-1}}={\bf -2(CX(X^{T}CX)^{-1}X^{T}BX(X^{T}CX)^{-1}+2BX(X^{T}CX)^{-1}}$
+\end{itemize}
+\subsection{行列式的导数}
+\begin{itemize}
+\item $d/d{\bf X(det(X))}=d/d{\bf X(det(X^{T}))}={\bf det(X)*X^{-T}}$
+\item $d/d{\bf X(det(AXB))}={\bf det(AXB)*X^{-T}}$
+\item $d/d{\bf X(ln(det(AXB)))}={\bf X^{-T}}$
+\item $d/d{\bf X(det(X^{k}))=k*det(X^{k})*X^{-T}}$
+\item $d/d{\bf X(ln(det(X^{k})))=kX^{-T}}$
+\item {\color{red}[Real]} $d/d{\bf X(det(X^{T}CX))}={\bf
+    det(X^{T}CX)*(C+C^{T})X(X^{T}CX)^{-1}}$
+\item {\color{red} [C:Real,Symmetric]}$d/d{\bf
+    X(det(X^{T}CX))=2det(X^{T}CX)*CX(X^{T}CX)^{-1}}$
+\item {\color{red}[C:Real,Symmetric]}$d/d{\bf X(ln(det(X^{T}CX)))=2CX(X^{T}CX)^{-1}}$
+\end{itemize}
+\subsection{雅可比}
+如果$\bf y$是$\bf x$的函数，则有$d{\bf y^T}/d{\bf x}$是$\bf y$相对于$\bf x$的雅可比矩阵。
+$|d{\bf y^T}/d{\bf x}|$称为$\bf y$相对于$\bf x$的雅可比行列式，它主要用在积分中变换积分变量：
+\begin{equation}
+\int (f({\bf y})d{\bf y})=\int(f(\mathbf{y(x)})|d{\bf y^T}/d{\bf x}|dx)
+\end{equation}
+\subsection{Hessian矩阵}
+如果$f$是$x$的函数，则对称矩阵$d^{2}f/dx^{2}=d/dx^{T}(df/dx)$被称为函
+数f(x)的Hessian矩阵。对于$df/d{\bf x}=0$的点，若Hessian矩阵是正定，负
+定和不定的情况，分别为最小值，最大值，和鞍点。
+\begin{shaded}
+\begin{itemize}
+\item $d^{2}/d{\bf x^{2}(AX+B)^{T}C(Dx+e)=A^{T}CD+D^{T}C^{T}A}$
+\item $d^{2}/d{\bf x^{2}(a^{T}x)=0}$
+\item $d^{2}/d{\bf x^{2}(x^{T}x)=2I}$
+\item $d^{2}/d{\bf x^{2}(x^{T}Cx)=C+C^{T}}$
+\item $d^{2}/d{\bf x^{2}(Ax+b)^{T}(Dx+e)=A^{T}D+D^{T}A}$
+\item $d^{2}/d{\bf x^{2}(Ax+b)^{T}(Ax+b)=2A^{T}A}$
+\item {\color{red}[C:Symmetric]} $d^{2}/d{\bf x^{2}(Ax+b)^{T}C(Ax+b)=2A^{T}CA}$
+\end{itemize}
+\end{shaded}
+\section{二阶锥规划}
+\subsection{基本形式\cite{Lobo:1998aa}}
+\begin{shaded}
+\begin{equation}
+\label{eq:4}
+\begin{split}
+\mathbf{minimize}~ &f^{T}(x) \\
+\mathbf{subject~to}~& ||A_{i}x+b_{i}|| \leq c_{i}^{T}x+d_{i},~i=1,2,\cdots,N
+\end{split}
+\end{equation}\index{二阶锥规划基本形式}
+\end{shaded}
+其中，$x\in \mathbb{R}^{n}$是优化变量，优化问题的参数为$f\in
+\mathbb{R}^{n},A_{i}\in \mathbb{R}^{(n_{i}-1)\times n},b_{i}\in
+\mathbb{R}^{n_{i}-1},c_{i}\in \mathbb{R}^{n},d_{i}\in \mathbb{R}$。范
+数表示欧几里得范数，即:$||u||=(u^{T}u)^{1/2}$。约束
+\begin{equation}
+\label{eq:5}
+||A_{i}x+b_{i}||\leq c_{i}^{T}+d_{i}
+\end{equation}
+为维度$n_{i}$的二阶锥约束。因为标准锥，或者k维单位二阶凸锥被定义为:
+\begin{equation}
+\label{eq:6}
+\mathscr{C}_{k}=\left\{\begin{bmatrix}u\\t\end{bmatrix}|u\in\mathbb{R}^{k-1},t\in\mathbb{R},||u||\leq t\right\}
+\end{equation}
+又被称做二次冰锥，活着洛伦兹锥。由于二阶锥约束的点集是单位二阶锥在仿射
+映射下的原象：
+\begin{equation}
+\label{eq:7}
+||A_{i}x+b_{i}||\leq c_{i}^{T}x+d_{i} \Longleftrightarrow \begin{bmatrix}A_{i}\\c_{i}^{T}\end{bmatrix}x+\begin{bmatrix}b_{i}\\d_{i}\end{bmatrix}\in\mathscr{C}_{n_{i}}
+\end{equation}
+因此是一个凸约束。故SOCP是一个凸优化问题。
+\subsection{半正定问题}
+二阶锥规划可以转化成如下形式的半正定问题：
+\begin{equation}
+\label{eq:8}
+\begin{split}
+\mathbf{minimize}~&f^{T}x \\
+\mathbf{subject~to}~&\begin{bmatrix}(c_{i}^{T}x+d_{i})I &
+  A_{i}x+b_{i}\\ (A_{i}x+b_{i})^{T} & c_{i}^{T}x+d_{i} \end{bmatrix}
+\succeq 0,~i=1,\cdots,N
+\end{split}
+\end{equation}
+然而，通过求解半正定规划来求解二次锥优化并不是一个好的办法，因为内点法
+对于SOCP问题，比SDP问题有更好的收敛速度。
+\subsection{能够变换为SOCP问题的形式}
+\subsubsection{二次约束的二次规划}
+\subsubsection{范数的和与最大值问题}
+\subsubsection{双曲约束问题}
+\subsubsection{矩阵泛函问题}
+\subsubsection{可表示为二阶锥的函数和集合}
+
+\chapter{最优化问题与KKT条件}
+\section{优化问题与对偶函数、对偶问题}
+考虑如下的最优化问题：
+\begin{equation}
+\label{eq:9}
+\begin{split}
+\mathbf{minimize ~} & f_{0}(x) \\
+\mathbf{subject~to~}& f_{i}(x)\leq 0,~i=1,2,\cdots,m \\
+                    & h_{i}(x)=0,~i=1,2,\cdots,p
+\end{split}
+\end{equation}
+其自变量为$x\in \mathbf{R}^{n}$，设问题的定义域为
+$\mathcal{D}=\bigcap\limits_{i=0}^{m}\mathbf{dom} f_{i} \cap
+\bigcap\limits_{i=1}^{p}\mathbf{dom} h_{i}$，优化问题的最优值为$p^{*}$。
+注意，这里并没有假设\eqref{eq:9}是一个凸优化问题。
+
+问题\eqref{eq:9}的Lagrange函数
+$L:\mathbf{R}^{n}\times\mathbf{R}^{m}\times\mathbf{R}\rightarrow\mathbf{R}$
+为：
+\begin{equation}
+\label{eq:10}
+L(x,\lambda,v)=f_{0}(x)+\sum\limits_{i=1}^{m}\lambda_{i}f_{i}(x)+\sum\limits_{i=1}^{p}v_{i}h_{i}(x)
+\end{equation}
+
+{\bf{Lagrange 对偶函数}}$g$为
+$g:\mathbf{R}^{m}\times\mathbf{R}^{p}\rightarrow\mathbf{R}$，关于
+{\bf{Lagrange函数}}关于$x$的最小值：
+\begin{equation}
+\label{eq:11}
+g(\lambda,v)=\mathbf{inf}_{x\in\mathcal{D}}L(x,\lambda,v)
+\end{equation}
+\begin{shaded}
+由于{\bf{Lagrange对偶函数}}是关于$(\lambda,v)$的仿射函数的逐点下确界，所
+以，即使原问题不是凸的，对偶函数也是{\bf{凹函数}}。
+\end{shaded}
+于是，有$\lambda\geq 0, v$，下面式子成立：
+\begin{equation}
+\label{eq:12}
+g(\lambda,v)\leq p^{*}
+\end{equation}
+即$g(\lambda,v)$是愿问题最优解的一个下界。
+
+Lagrange对偶问题：
+\begin{equation}
+\label{eq:13}
+\begin{split}
+\mathbf{maximize ~ }& g(\lambda,v) \\
+\mathbf{subject~to~}& \lambda\geq 0
+\end{split}
+\end{equation}
+设Lagrange对偶问题具有可行解，即满足$\lambda\leq 0$和
+$g(\lambda,v)>-\infty$的一组$(\lambda,v)$。称$(\lambda^{*},v^{*})$为
+对偶最优解，或者最优Lagrange乘子，对应的最优值为$d^{*}$。根据定义，如
+下额式子成立:
+\begin{equation}
+\label{eq:14}
+d^{*}\leq p^{*}
+\end{equation}
+定义差值$p^{*}-d^{*}$为原问题的最有对偶间隙。
+\section{弱对偶性与强对偶性}
+\eqref{eq:14}称为弱对偶性。若$p^{*}=d^{*}$，则称强对偶性成立。
+
+对于一般的情况，强对偶性不成立。但是如果原问题是凸问题，则强对偶性通常
+（但不总是）成立。强对偶性成立的条件：1.原问题是凸问题，2.Slater条件成
+立：存在一点$x\in \mathbf{relint}~\mathcal{D}$，使得下面式子成立了：
+\begin{equation}
+\label{eq:15}
+f_{i}(x)<0,~i=1,\cdots,m, ~ Ax=b
+\end{equation}
+满足上面式子的点又被称为是严格可行点，这是因为不等式约束严格成立。
+
+若化的Slater条件：若不等式约束函数$f_{i}$中有写函数是仿射函数，则仿射
+不等式不需要严格成立:
+\begin{equation}
+\label{eq:16}
+f_{i}(x)\leq 0,i=1,2\cdots,k,~f_{i}(x)<0,~i=k+1,\cdots,m,~Ax=b
+\end{equation}
+其中，$f_{1},f_{2},\cdots,f_{k}$是仿射的。
+\begin{shaded}
+注意到当所有的约束条件都是线性等式或者不等式，并且$\mathbf{dom} f_{0}$
+是开集时，条件\eqref{eq:16}就是可行性条件。
+\end{shaded}
+\section{互补松性和KKT条件}
+令$x^{*}$和$(\lambda^{*},v^{*})$分别是原问题和对偶问题的最优解，则有：
+\begin{equation}
+\label{eq:17}
+\begin{split}
+f_{0}(x^{*})&=g(\lambda^{*},v^{*}) \\
+       & = \mathbf{inf}_{x}L(x^{*},\lambda^{*},v^{*})\\
+       & \leq
+       f_{0}(x^{*})+\sum\limits_{i=1}^{m}\lambda_{i}^{*}f_{i}(x^{*})+\sum\limits_{i=1}^{p}v_{i}^{*}h_{i}(x^{*})
+       \\
+       & \leq f_{0}(x^{*})
+\end{split}
+\end{equation}
+第一个等式说明最优对偶间隙为零，第二个是对偶函数的定义，第三个不等式根
+据Lagrange函数关于$x$求下确界小于等于其在$x=x^{*}$处的值求得来。由此可
+得一个重要的结论：
+\begin{equation}
+\label{eq:18}
+\sum\limits_{i=1}^{m}\lambda_{i}^{*}f_{i}(x^{*})=0
+\end{equation}
+\begin{shaded}
+由于每一项都非正，因此有:
+\begin{equation}
+\label{eq:19}
+\lambda_{i}^{*}f_{i}(x^{*})=0,~i=1,\cdots,m.
+\end{equation}
+上面的条件称为{\bf{互补松弛性.}}
+\end{shaded}
+
+Karush-Kuhn-Tucker(KKT)条件:
+\begin{shaded}
+\begin{equation}
+\label{eq:20}
+\begin{split}
+f_{x}(x^{*}) & \leq 0,~ i=1,\cdots,m \\
+h_i(x^{*}) &=0,~ i=1,\cdots,m \\
+\lambda_{i}^{*}&\geq 0,~i=1,\cdots,m \\
+\lambda_{i}^{*}f_{i}(x^{*})&=0,~i=1,\cdots,m \\
+\Delta f_{0}(x^{*})+\sum\limits_{i=1}^{m}\lambda_{i}^{*}\Delta
+f_{i}(x^{*})+\sum\limits_{i=1}^{*}v_{i}^{*}\Delta h_{i}(x^{*})&=0
+\end{split}
+\end{equation}
+\end{shaded}
+若某个凸优化问题具有可微的目标函数和约束函数，且其满足Slater条件，那么
+KKT条件是最优性的充要条件：Slater条件意味着最优对偶间隙为零，且对偶最
+优解可以达到，因此x是原问题最优解，当且仅当存在 $(\lambda,v)$，二者满
+足KKT条件。
+\chapter{概率和分布相关}
+\section{正态分布、Gamma分布、卡方分布、Nakagami-m分布}
+\subsection{Basic: Exponential Distributon}
+\noindent PDF:
+\begin{equation}
+\label{eq:35}
+f(x;\lambda)=\lambda e^{-\lambda x} \quad x\geq 0
+\end{equation}
+$\lambda$ is the \textbf{Rate} parameter, while $\beta=1/\lambda$ is the
+\textbf{Scale} parameter. \\
+CDF:
+\begin{equation}
+\label{eq:36}
+F(x;\lambda)=1-e^{-\lambda x} \quad x\geq 0
+\end{equation}
+$\mathbb{E}[X]=\frac{1}{\lambda}=\beta$,
+$\textbf{Var}[X]=\frac{1}{\lambda^{2}}$ \\
+Properties:\\
+\begin{itemize}
+\item $X_{i}\sim \rm{Exp}(\lambda)$, then
+  $\min(X_{1},X_{2},\cdots,X_{n})\sim\rm{Exp}(n\lambda)$
+\item $X_{i}\sim \rm{Exp}(\lambda)$, then
+  $X_{1}+X_{2}+\cdots+X_{k}\sim\rm{Erlang}(k,\lambda)=Gamma(k,\lambda^{-1})\quad
+  (k,\theta)-form$
+\end{itemize}
+\subsection{Normal Distribution}
+\noindent Notation:
+\begin{equation}
+\label{eq:23}
+\mathcal{N}(\mu,\sigma^{2}) 
+\end{equation}
+PDF:
+\begin{equation}
+\label{eq:21}
+f(x;\mu,\sigma)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}}
+\end{equation}
+CDF:
+\begin{equation}
+\label{eq:22}
+F(x;\mu,\sigma)=\frac{1}{2}[1+\mathrm{erf}(\frac{(x-\mu)^{2}}{\sigma\sqrt{2}})]
+\end{equation}
+运算：
+\begin{itemize}
+\item $X_{1} \sim
+  \mathcal{N}(\mu_{1},\sigma_{1})$,$X_{2}\sim\mathcal{N}(\mu_{2},\sigma_{2})$,
+$X_{1}+X_{2} \sim
+\mathcal{N}(\mu_{1}+\mu_{2},\sqrt{\sigma_{1}^{2}+\sigma_{2}^{2}})$
+\item $X\sim\mathcal{N}(\mu,\sigma)$,then $X^{2}/\sigma^{2}\sim
+  \chi_{1}(\mu^{2}/\sigma^{2})$,$\chi_{1}$为自由度为1的卡方分布
+\item $Z=X_{1}X_{2}$，其中$X_{2},X_{2}$为标准正态分布，则Z为“乘积”正态
+  分布，pdf为：
+\begin{equation}
+\label{eq:24}
+f_{z}(z)=\pi^{-1}K_{0}(|z|)
+\end{equation}
+其中$K_{0}$为修正第二类Bessel函数
+\begin{shaded}
+微分方程：
+\begin{equation}
+\label{eq:39}
+x^{2}\frac{d^{2}y}{dx^{2}}+x\frac{dy}{dx}+(x^{2}-\alpha^{2})y=0
+\end{equation}
+对于任意的复数$\alpha$，方程的标准解被称为Bessel函数。对于正的$\alpha$
+或者整数，如果方程的解在$x=0$处有届，则解被称为第一类Bessel函数，记为
+$J_{\alpha}(x)$;如果在$x=0$处为奇异并且多值，则该解被称为第二类Bessel
+函数，记为
+$Y_{\alpha}(x)$. $H_{\alpha}^{1}(x)=J_{\alpha}(x)+iY_{\alpha}(x),H_{\alpha}^{2}(x)=J_{\alpha}(x)-iY_{\alpha}(x)$
+为另外两个线性无关的解，被称为Hankel函数。\\
+微分方程：
+\begin{equation}
+\label{eq:40}
+x^{2}\frac{d^{2}y}{dx^{2}}+x\frac{dy}{dx}-(x^{2}+\alpha^{2})y=0
+\end{equation}
+对应的解，被称为修正的Bessel函数，第一类和第二类分别记录为$I_{\alpha},K_{\alpha}$
+\end{shaded}
+\item $Z=\sqrt{X_{1}^{2}+X_{2}^{2}}$,其中$X_{1},X_{2}$为标准正态分布，
+  则Z为Rayleigh分布
+\item $Z=X_{1}\div X_{2}$,其中$X_{1},X_{2}$为标准正态分布,则Z为Cauchy(0,1)分
+  布
+\item $Z=X_{1}^{2}+X_{2}^{2}+\cdots+X_{n}^{2}$,其中
+  $X_{i}\sim\mathcal{N}(0,1)$,则Z为$\chi_{n}$ 自由度为$n$的卡方分布
+\item $X_{1},X_{2}\cdots X_{n}\sim
+  \mathcal{N}(0,1)$,$Y_{1},Y_{2},\cdots Y_{m}\sim \mathcal{N}(0,1)$,则
+  它们的归一化平方和之比:
+\begin{equation}
+\label{eq:25}
+F=\frac{(X_{1}^{2}+X_{2}^{2}+\cdots+X_{n}^{2})/n}{(Y_{1}^{2}+Y_{2}^{2}+\cdots+Y_{m}^{2})/m}\sim F_{n,m}
+\end{equation}
+其中$F_{n,m}$为自由度为$(n,m)$的F分布。
+\end{itemize}
+\subsection{Gamma Distribution}
+\begin{shaded}
+\noindent Notation: Gamma分布具有两种表示，形状－尺度(shape-scale)
+\begin{equation}
+\label{eq:29}
+X\sim\Gamma(k,\theta)=Gamma(k,\theta)
+\end{equation}
+或者形状－率(shape-rate)
+\begin{equation}
+\label{eq:30}
+X\sim\Gamma(\alpha,\beta)=Gamma(\alpha,\beta)
+\end{equation}
+其中$\alpha=k,\beta=\frac{1}{\theta}$
+\end{shaded}
+\noindent PDF:
+\begin{equation}
+\label{eq:26}
+f(x;k,\theta)=\frac{x^{k-1}e^{-\frac{x}{\theta}}}{\theta^{k}\Gamma(k)}
+\end{equation}
+for $x>0,k,\theta>0$
+\begin{equation}
+\label{eq:31}
+g(x;\alpha,\beta)=\frac{\beta^{\alpha}x^{\alpha-1}e^{-x\beta}}{\Gamma(\alpha)}
+\end{equation}
+for $x>0,\alpha,\beta>0$. \\
+CDF:
+\begin{equation}
+\label{eq:27}
+F(x;k,\theta)=\int_{0}^{x}f(u;k,\theta)du=\frac{\gamma(k,\frac{x}{\theta})}{\Gamma(k)}
+\end{equation}
+其中$\gamma(.,.)$为不完全gamma函
+数:$\gamma(s,x)=\int_{0}^{x}t^{s-1}e^{-t}dt$.
+若k为正整数，则gamma分布为Erlang分布.
+Summation:
+\begin{equation}
+\label{eq:28}
+\sum_{i=1}^{N}X_{i}\sim Gamma(\sum_{i-1}^{N}k_{i},\theta)
+\end{equation}
+其中，所有的$X_{i}$相互独立，且$X_{i}\sim Gamma(k_{i},\theta)$,具有相
+同的尺度参数。 \\
+Scaling:\\
+如果$X\sim Gamma(k,\theta)$，对于$c>0$，则有$cX\sim Gamma(k,c\theta)=Gamma(\alpha,\beta/c)$.
+\begin{shaded}
+事实上，如果$X$为一个指数随机变量，“率”rate参数为$\lambda$，则$cX$为一
+个率参数rate参数为$\lambda/c$的随机变量。由于
+\begin{equation}
+\label{eq:32}
+X\sim\mathrm{Exp}(\lambda) =  X\sim Gamma(1,\lambda^{-1})
+\quad (k,\theta)\mathrm{-form}
+\end{equation}
+故有此结论。
+\end{shaded}
+\subsection{Chi-Square Distribution}
+\noindent 如果$Z_{1},Z_{2},Z_{3}\cdots Z_{k}$是独立标准正态随机变量，
+则他们的平房和$Q=\sum_{i=1}^{k}Z_{i}^{2}$服从卡方分布，表示为:
+\begin{equation}
+\label{eq:33}
+Q\sim \chi^{2}(k)\quad\text{or}\quad Q\sim\chi_{k}^{2}
+\end{equation}
+PDF:
+\begin{equation}
+\label{eq:34}
+f(x;k)=\frac{x^{k/2-1}e^{-x/2}}{2^{k/2}\Gamma(\frac{k}{2})} \quad x>0;
+\end{equation}
+$\Gamma(\frac{1}{2})=\sqrt{\pi}$
+\begin{shaded}
+当$k=1$时，卡方分布为正态分布的平方；$k=2$时，为参数为$1/2$的指数分
+布,Rayleigh分布的平方；$k=3$时，为参数为1的Maxwell分布的平方
+$X\sim\text{Maxwell(1) then }X^{2}\sim\chi^{2}(2)$。
+\end{shaded}
+可加性：独立卡方分布随机变量的和仍旧为卡方分布，其自由度为所有随机变量
+自由度之和。\\
+
+如果$X_{1},X_{2}\cdots,X_{n}$是独立的卡方分布随机变量，自由
+度分别为$k_{i}$，则$Y=X_{1}+X_{2}+\cdots+X_{n}$为自由度为
+$\sum_{i=0}^{n}k_{i}$的卡方分布。
+\subsection{Nakagami-m Distribution}
+\noindent PDF:
+\begin{equation}
+\label{eq:37}
+f(x;m,\Omega)=\frac{2m^{m}}{\Gamma(m)\Omega^{m}}x^{2m-1}\mathrm{exp}(-\frac{m}{\Omega}x^{2})
+\end{equation}
+其中，$m,\Omega$可以表示为:
+\begin{equation}
+\label{eq:38}
+m=\frac{\mathbb{E}^{2}[X^{2}]}{\mathrm{Var}[X^{2}]},\quad \Omega=\mathbb{E}[X^{2}]
+\end{equation}
+Generation:
+\begin{itemize}
+\item 从Gamma分布产生，给定一个$Y\sim\Gamma(k,\theta)$，通过设置
+  $k=m,\theta=\Omega/m$,求取$Y$的根号$X=\sqrt{Y}$,则有
+  $X\sim\mathrm{Nakagami}(m,\Omega)$
+\item 从Chi-square产生,将卡方分布的自由度$k$变为$2m$,同时通过随机变量
+  的尺度变换得到。$Y\sim\chi(2m)$,$X=\sqrt{\Omega/2m}Y$服从参数为
+  $(m,\Omega)$的Nakagami分布.
+\end{itemize}
+\bibliographystyle{plain}
+\bibliography{ref} 
+\end{document}
