@@ -587,6 +587,76 @@ Generation:
   的尺度变换得到。$Y\sim\chi(2m)$,$X=\sqrt{\Omega/2m}Y$服从参数为
   $(m,\Omega)$的Nakagami分布.
 \end{itemize}
+\section{Moment-Generating Function}
+对于一个随机变量$x$和对应的概率密度函数$f(x)$,如果存在一个h使得在
+$|t|<h$时
+\begin{equation}
+\label{eq:41}
+M(t)=\mathbb{E}(e^{tx})
+\end{equation}
+$M(t)$被称为MGF函数。
+
+如果随机变量$X$和$Y$相互独立，则MGF函数满足:
+\begin{equation}
+\label{eq:42}
+\begin{split}
+M_{x+y}(t) & = \mathbb{E}(e^{t(x+y)}) \\
+          & = \mathbb{E}(e^{tx}e^{ty}) \\
+          & = \mathbb{E}(e^{tx})\mathbb{E}{(e^{ty})} \\
+          & = M_{x}(t)M_{y}(t)
+\end{split}
+\end{equation}
+如果$M(t)$在0点可微，则在0点的n阶矩可以用MGF在0点的微分表示:
+\begin{equation}
+\label{eq:43}
+\begin{split}
+M(t)=\mathbb{E}(e^{tx}) &\quad M(0)=1 \\
+M^{'}(t)=\mathbb{E}(xe^{tx}) &\quad M^{'}(0)=\mathbb{E}(x) \\
+M^{''}(t)=\mathbb{E}(x^{2}e^{tx}) &\quad M^{''}(0)=\mathbb{E}(x^{2})
+\\
+M^{(n)}(t)=\mathbb{E}(x^{n}e^{tx}) &\quad M^{(n)}(0)=\mathbb{E}(x^{n})
+\end{split}
+\end{equation}
+
+对于实分量的随机变量向量$X$,MGF函数可以表示为:
+\begin{equation}
+\label{eq:44}
+M_{X}(t)=\mathbb{E}(e^{<t,X>})
+\end{equation}
+其中$t$是一个向量，$<.,.>$表示向量点积.
+
+常见分布的MGF函数:
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline Distribution & Moment-generating function \\
+\hline Bernoulli $P(X=1)=p$ & $1-p+pe^{t}$ \\
+\hline Geometric $(1-p)^{k-1}p$ & $\frac{pe^{t}}{1-(1-p)e^{t}},\forall
+                                  t < -ln(1-p)$ \\
+\hline Binomial $B(n,p)$ & $(1-p+pe^{t})^{n}$ \\
+\hline Poisson $Pois(\lambda)$ & $e^{\lambda(e^{t}-1)}$ \\
+\hline Uniform continuous $U(a,b)$ & $\frac{e^{tb}-e^{ta}}{t(b-a)}$ \\
+\hline Uniform discrete $U(a,b)$ &
+                                   $\frac{e^{at}-e^{(b+1)t}}{(b-a+1)(1-e^{t})}$
+  \\
+\hline Normal $N(\mu,\sigma^{2})$ &
+                                    $e^{t\mu+\frac{1}{2}\sigma^{2}t^{2}}$
+  \\
+\hline Multivariate normal $N(\mu,\Sigma)$ &
+                                             $e^{t^{T}\mu+\frac{1}{2}t^{T}\Sigma
+                                             t}$ \\
+\hline Chi-square $\chi_{k}^{2}$ & $(1-2k)^{-k/2}$ \\
+\hline Gamma $\Gamma(k,\theta)$ & $(1-t\theta)^{-k}$ \\
+\hline Exponential $Exp(\lambda)$ & $(1-t\lambda^{-1})^{-1},\quad
+                                    t<\lambda$ \\
+\hline Cauchy $(\mu,\theta)$ & does not exist \\
+\hline Rayleigh($\sigma$) & $1+\sigma
+                            te^{\sigma^{2}t^{2}/2}\sqrt{\frac{\pi}{2}}(erf(\frac{\sigma
+                            t}{\sqrt{2}})+1)$ \\
+\hline
+\end{tabular}
+\caption{\label{tab:mgf}}
+\end{table}
 \bibliographystyle{plain}
 \bibliography{ref} 
 \end{document}
