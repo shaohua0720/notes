@@ -43,6 +43,14 @@
 %\printindex
 \chapter{矩阵计算}
 \section{文中符号}
+矩阵计算，通常有分子表示法与分母表示法两种，往往需要根据上下文中的的式
+子去推导是哪种表示方法。
+\begin{equation}
+\label{eq:45}
+\frac{\partial \mathbf{Ax}}{\partial \mathbf{x}}=\mathbf{A}
+\end{equation}
+  这种表示法，通常为分子表示法；若结果为$\mathbf{A}^{T}$，则为分母标记
+  法。两种表示法通常结果相差一个转置。\par
 \begin{itemize}
 \item 用大写字母$\bf A$表示矩阵，小写字母$\bf a$表示列向量，a表示实数或者复数标量
 \item $+,-,*$分别表示矩阵加，减乘
@@ -657,6 +665,8 @@ M_{X}(t)=\mathbb{E}(e^{<t,X>})
 \end{tabular}
 \caption{\label{tab:mgf}}
 \end{table}
+\chapter{博弈论}
+\chapter{排队论}
 \bibliographystyle{plain}
 \bibliography{ref} 
 \end{document}
